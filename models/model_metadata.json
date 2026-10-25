@@ -1,0 +1,43 @@
+{
+  "model_name": "random_forest",
+  "artifact": "models/random_forest_pipeline.joblib",
+  "source_artifact": "results/random_forest_pipeline.joblib",
+  "target": {
+    "name": "pass",
+    "positive_label": 1,
+    "definition": "pass when G3 >= 10; fail when G3 < 10"
+  },
+  "excluded_features": ["G1", "G2", "G3"],
+  "features": [
+    "school",
+    "sex",
+    "age",
+    "address",
+    "famsize",
+    "Pstatus",
+    "Medu",
+    "Fedu",
+    "Mjob",
+    "Fjob",
+    "reason",
+    "guardian",
+    "traveltime",
+    "studytime",
+    "failures",
+    "schoolsup",
+    "famsup",
+    "paid",
+    "activities",
+    "nursery",
+    "higher",
+    "internet",
+    "romantic",
+    "famrel",
+    "freetime",
+    "goout",
+    "Dalc",
+    "Walc",
+    "health",
+    "absences"
+  ]
+}

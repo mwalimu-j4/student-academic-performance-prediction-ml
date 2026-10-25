@@ -20,6 +20,8 @@ student-academic-performance-prediction-ml/
 │   ├── raw/                 # downloaded CSV, ignored by Git
 │   └── processed/           # optional processed data, ignored by Git
 ├── results/                 # metrics, plots, and fitted model outputs
+├── models/                  # deployment model artifact and schema manifest
+├── app.py                   # Streamlit demonstration
 ├── RESULTS_AND_DISCUSSION.md
 ├── scripts/
 │   ├── download_data.py
@@ -101,6 +103,29 @@ UCI Machine Learning Repository, dataset 320, *Student Performance*:
 - Related paper: P. Cortez and A. Silva, “Using Data Mining to Predict Secondary School Student Performance,” FUBUTEC 2008, pp. 5–12.
 
 The download script writes `data/raw/source_manifest.json`, including the source metadata and SHA-256 hashes of retrieved files. It also writes `results/data_verification.json`, containing the observed schema and data-quality audit.
+
+## Streamlit deployment
+
+The browser demonstration is implemented in [app.py](./app.py). It loads the exact evaluated Random Forest pipeline from `models/random_forest_pipeline.joblib`; it does not retrain during prediction. The model artifact is included because the deployed application must have the approved fitted pipeline available. `models/model_metadata.json` records its exact 30 input features and the excluded `G1`, `G2`, and `G3` fields.
+
+Run locally:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+To deploy on Streamlit Community Cloud:
+
+1. Push the `submission` branch after reviewing the changes.
+2. Open https://share.streamlit.io/ and sign in with GitHub.
+3. Select repository `mwalimu-j4/student-academic-performance-prediction-ml`.
+4. Select branch `submission`.
+5. Set the main file to `app.py`.
+6. Deploy and wait for the application health check to complete.
+7. Test a valid form submission and inspect the evaluation section.
+
+The app accepts only the approved pre-period features, validates documented categorical values and numeric ranges, and does not request names or personal identifiers. Do not enter real student records into a public demonstration. The current evaluation missed half of the failing students in the held-out set, so the dashboard is for educational demonstration and human-reviewed decision support only.
 
 ## Acquisition and verification
 

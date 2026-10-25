@@ -1,0 +1,231 @@
+{
+  "experiment": {
+    "random_state": 42,
+    "test_size": 0.2,
+    "cv_splits": 5,
+    "stratified": true,
+    "target": "pass = 1 when G3 >= 10; fail = 0 otherwise",
+    "excluded_from_features": [
+      "G1",
+      "G2",
+      "G3"
+    ],
+    "training_rows": 316,
+    "test_rows": 79,
+    "feature_count_before_encoding": 30,
+    "positive_rate": 0.6708860759493671
+  },
+  "selection_criterion": {
+    "primary": "held-out fail-class recall",
+    "tie_breaker": "held-out fail-class F1",
+    "criterion": "Higher fail recall is preferred for identifying students at risk of failing; if tied, prefer higher fail F1.",
+    "objective_threshold": "No externally imposed performance threshold; measured values are reported without claiming target attainment.",
+    "ranking": [
+      "random_forest",
+      "decision_tree"
+    ],
+    "recommended_model": "random_forest"
+  },
+  "models": {
+    "decision_tree": {
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.601388888888889,
+          "std": 0.0739427454483154
+        },
+        "precision": {
+          "mean": 0.6998119272032316,
+          "std": 0.03601483251823061
+        },
+        "recall": {
+          "mean": 0.7032115171650055,
+          "std": 0.13198612625525602
+        },
+        "f1": {
+          "mean": 0.6970640877830899,
+          "std": 0.07917691591472396
+        },
+        "roc_auc": {
+          "mean": 0.5716540104413859,
+          "std": 0.03725050590829649
+        }
+      },
+      "test": {
+        "positive_class": {
+          "label": 1,
+          "name": "pass"
+        },
+        "averaging": {
+          "precision": "binary, pos_label=1",
+          "recall": "binary, pos_label=1",
+          "f1": "binary, pos_label=1"
+        },
+        "test_examples": 79,
+        "actual_class_distribution": {
+          "fail": 26,
+          "pass": 53
+        },
+        "predicted_class_distribution": {
+          "fail": 32,
+          "pass": 47
+        },
+        "accuracy": 0.5949367088607594,
+        "precision": 0.723404255319149,
+        "recall": 0.6415094339622641,
+        "f1": 0.68,
+        "roc_auc": 0.5286647314949202,
+        "at_risk_fail_class": {
+          "class_label": 0,
+          "class_name": "fail",
+          "recall": 0.5,
+          "precision": 0.40625,
+          "f1": 0.4482758620689655
+        },
+        "classification_report": {
+          "fail": {
+            "precision": 0.40625,
+            "recall": 0.5,
+            "f1-score": 0.4482758620689655,
+            "support": 26.0
+          },
+          "pass": {
+            "precision": 0.723404255319149,
+            "recall": 0.6415094339622641,
+            "f1-score": 0.68,
+            "support": 53.0
+          },
+          "accuracy": 0.5949367088607594,
+          "macro avg": {
+            "precision": 0.5648271276595744,
+            "recall": 0.570754716981132,
+            "f1-score": 0.5641379310344827,
+            "support": 79.0
+          },
+          "weighted avg": {
+            "precision": 0.6190243738217075,
+            "recall": 0.5949367088607594,
+            "f1-score": 0.6037363596682671,
+            "support": 79.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            13,
+            13
+          ],
+          [
+            19,
+            34
+          ]
+        ]
+      },
+      "reload_check": {
+        "input_rows": 2,
+        "predictions_on_held_out_examples": [
+          0,
+          1
+        ]
+      }
+    },
+    "random_forest": {
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.6773313492063492,
+          "std": 0.024004041727891928
+        },
+        "precision": {
+          "mean": 0.7377733795150916,
+          "std": 0.02025309385842296
+        },
+        "recall": {
+          "mean": 0.8065337763012181,
+          "std": 0.023786591753415503
+        },
+        "f1": {
+          "mean": 0.770317788894639,
+          "std": 0.016162076763208164
+        },
+        "roc_auc": {
+          "mean": 0.6795388387913304,
+          "std": 0.06406680783119387
+        }
+      },
+      "test": {
+        "positive_class": {
+          "label": 1,
+          "name": "pass"
+        },
+        "averaging": {
+          "precision": "binary, pos_label=1",
+          "recall": "binary, pos_label=1",
+          "f1": "binary, pos_label=1"
+        },
+        "test_examples": 79,
+        "actual_class_distribution": {
+          "fail": 26,
+          "pass": 53
+        },
+        "predicted_class_distribution": {
+          "fail": 23,
+          "pass": 56
+        },
+        "accuracy": 0.7088607594936709,
+        "precision": 0.7678571428571429,
+        "recall": 0.8113207547169812,
+        "f1": 0.7889908256880734,
+        "roc_auc": 0.6295355587808418,
+        "at_risk_fail_class": {
+          "class_label": 0,
+          "class_name": "fail",
+          "recall": 0.5,
+          "precision": 0.5652173913043478,
+          "f1": 0.5306122448979592
+        },
+        "classification_report": {
+          "fail": {
+            "precision": 0.5652173913043478,
+            "recall": 0.5,
+            "f1-score": 0.5306122448979592,
+            "support": 26.0
+          },
+          "pass": {
+            "precision": 0.7678571428571429,
+            "recall": 0.8113207547169812,
+            "f1-score": 0.7889908256880734,
+            "support": 53.0
+          },
+          "accuracy": 0.7088607594936709,
+          "macro avg": {
+            "precision": 0.6665372670807453,
+            "recall": 0.6556603773584906,
+            "f1-score": 0.6598015352930163,
+            "support": 79.0
+          },
+          "weighted avg": {
+            "precision": 0.7011655790549571,
+            "recall": 0.7088607594936709,
+            "f1-score": 0.7039548370736054,
+            "support": 79.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            13,
+            13
+          ],
+          [
+            10,
+            43
+          ]
+        ]
+      },
+      "reload_check": {
+        "input_rows": 2,
+        "predictions_on_held_out_examples": [
+          0,
+          0
+        ]
+      }
+    }
+  }
+}

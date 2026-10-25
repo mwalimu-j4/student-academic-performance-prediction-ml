@@ -1,0 +1,235 @@
+{
+  "source_manifest": "data/raw/source_manifest.json",
+  "verification": {
+    "row_count": 395,
+    "column_count": 33,
+    "columns": [
+      "school",
+      "sex",
+      "age",
+      "address",
+      "famsize",
+      "Pstatus",
+      "Medu",
+      "Fedu",
+      "Mjob",
+      "Fjob",
+      "reason",
+      "guardian",
+      "traveltime",
+      "studytime",
+      "failures",
+      "schoolsup",
+      "famsup",
+      "paid",
+      "activities",
+      "nursery",
+      "higher",
+      "internet",
+      "romantic",
+      "famrel",
+      "freetime",
+      "goout",
+      "Dalc",
+      "Walc",
+      "health",
+      "absences",
+      "G1",
+      "G2",
+      "G3"
+    ],
+    "data_types": {
+      "school": "object",
+      "sex": "object",
+      "age": "int64",
+      "address": "object",
+      "famsize": "object",
+      "Pstatus": "object",
+      "Medu": "int64",
+      "Fedu": "int64",
+      "Mjob": "object",
+      "Fjob": "object",
+      "reason": "object",
+      "guardian": "object",
+      "traveltime": "int64",
+      "studytime": "int64",
+      "failures": "int64",
+      "schoolsup": "object",
+      "famsup": "object",
+      "paid": "object",
+      "activities": "object",
+      "nursery": "object",
+      "higher": "object",
+      "internet": "object",
+      "romantic": "object",
+      "famrel": "int64",
+      "freetime": "int64",
+      "goout": "int64",
+      "Dalc": "int64",
+      "Walc": "int64",
+      "health": "int64",
+      "absences": "int64",
+      "G1": "int64",
+      "G2": "int64",
+      "G3": "int64"
+    },
+    "duplicate_records": 0,
+    "duplicate_rows_beyond_first": 0,
+    "missing_values": {
+      "school": 0,
+      "sex": 0,
+      "age": 0,
+      "address": 0,
+      "famsize": 0,
+      "Pstatus": 0,
+      "Medu": 0,
+      "Fedu": 0,
+      "Mjob": 0,
+      "Fjob": 0,
+      "reason": 0,
+      "guardian": 0,
+      "traveltime": 0,
+      "studytime": 0,
+      "failures": 0,
+      "schoolsup": 0,
+      "famsup": 0,
+      "paid": 0,
+      "activities": 0,
+      "nursery": 0,
+      "higher": 0,
+      "internet": 0,
+      "romantic": 0,
+      "famrel": 0,
+      "freetime": 0,
+      "goout": 0,
+      "Dalc": 0,
+      "Walc": 0,
+      "health": 0,
+      "absences": 0,
+      "G1": 0,
+      "G2": 0,
+      "G3": 0
+    },
+    "target": {
+      "column": "G3",
+      "documented_scale": "0-20",
+      "pass_threshold": "G3 >= 10",
+      "distribution": {
+        "0": 38,
+        "4": 1,
+        "5": 7,
+        "6": 15,
+        "7": 9,
+        "8": 32,
+        "9": 28,
+        "10": 56,
+        "11": 47,
+        "12": 31,
+        "13": 31,
+        "14": 27,
+        "15": 33,
+        "16": 16,
+        "17": 6,
+        "18": 12,
+        "19": 5,
+        "20": 1
+      },
+      "binary_distribution": {
+        "fail": 130,
+        "pass": 265
+      }
+    },
+    "categorical_unique_values": {
+      "school": [
+        "GP",
+        "MS"
+      ],
+      "sex": [
+        "F",
+        "M"
+      ],
+      "address": [
+        "R",
+        "U"
+      ],
+      "famsize": [
+        "GT3",
+        "LE3"
+      ],
+      "Pstatus": [
+        "A",
+        "T"
+      ],
+      "Mjob": [
+        "at_home",
+        "health",
+        "other",
+        "services",
+        "teacher"
+      ],
+      "Fjob": [
+        "at_home",
+        "health",
+        "other",
+        "services",
+        "teacher"
+      ],
+      "reason": [
+        "course",
+        "home",
+        "other",
+        "reputation"
+      ],
+      "guardian": [
+        "father",
+        "mother",
+        "other"
+      ],
+      "schoolsup": [
+        "no",
+        "yes"
+      ],
+      "famsup": [
+        "no",
+        "yes"
+      ],
+      "paid": [
+        "no",
+        "yes"
+      ],
+      "activities": [
+        "no",
+        "yes"
+      ],
+      "nursery": [
+        "no",
+        "yes"
+      ],
+      "higher": [
+        "no",
+        "yes"
+      ],
+      "internet": [
+        "no",
+        "yes"
+      ],
+      "romantic": [
+        "no",
+        "yes"
+      ]
+    }
+  },
+  "processing": {
+    "input_rows": 395,
+    "output_rows": 395,
+    "duplicate_rows_removed": 0,
+    "missing_values_handled": "none found",
+    "excluded_columns": [
+      "G1",
+      "G2",
+      "G3"
+    ],
+    "target_definition": "pass = 1 when G3 >= 10; fail = 0 otherwise",
+    "output_path": "data/processed/student-mat-early-prediction.csv"
+  }
+}

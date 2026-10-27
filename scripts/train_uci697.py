@@ -29,6 +29,14 @@ def main() -> None:
         features, target, test_size=0.25, stratify=target, random_state=42
     )
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    candidates = [
+        {"name": "logistic_regression_balanced", "model_name": "logistic_regression", "class_weight": "balanced"},
+        {"name": "logistic_regression_unweighted", "model_name": "logistic_regression", "class_weight": None},
+        {"name": "random_forest_balanced", "model_name": "random_forest", "class_weight": "balanced"},
+        {"name": "random_forest_unweighted", "model_name": "random_forest", "class_weight": None},
+        {"name": "random_forest_enrolled_weight_3", "model_name": "random_forest",
+         "class_weight": {"Dropout": 1.0, "Enrolled": 3.0, "Graduate": 1.0}},
+    ]
     metrics: dict = {
         "dataset": {
             "name": "Predict Students' Dropout and Academic Success",
@@ -43,31 +51,38 @@ def main() -> None:
             "training_rows": len(x_train), "test_rows": len(x_test),
             "features": PREDICTION_FEATURES,
             "excluded_downstream_features": [c for c in frame.columns if c not in PREDICTION_FEATURES + ["Target"]],
+            "test_evaluation_policy": "The holdout is evaluated once, only after CV model selection.",
         },
         "models": {},
     }
-    for name in ("logistic_regression", "random_forest"):
-        model = build_pipeline(x_train, name)
+    for candidate in candidates:
+        name = candidate["name"]
+        model = build_pipeline(x_train, candidate["model_name"], candidate["class_weight"])
         cv_scores = cross_validate(
             model, x_train, y_train, cv=cv,
             scoring=["accuracy", "f1_macro", "precision_macro", "recall_macro"],
             n_jobs=1,
         )
-        model.fit(x_train, y_train)
-        test = evaluate_predictions(model, x_test, y_test)
         metrics["models"][name] = {
+            "algorithm": candidate["model_name"],
+            "class_weight": candidate["class_weight"],
             "cross_validation": {
                 metric: {"mean": float(cv_scores[f"test_{metric}"].mean()), "std": float(cv_scores[f"test_{metric}"].std())}
                 for metric in ("accuracy", "f1_macro", "precision_macro", "recall_macro")
             },
-            "test": test,
         }
-        joblib.dump(model, ROOT / "models" / f"uci697_{name}.joblib")
-    best = max(metrics["models"], key=lambda n: metrics["models"][n]["test"]["macro"]["f1"])
-    joblib.dump(
-        joblib.load(ROOT / "models" / f"uci697_{best}.joblib"),
-        ROOT / "models" / "student_outcome_pipeline.joblib",
+    best = max(
+        metrics["models"],
+        key=lambda n: (
+            metrics["models"][n]["cross_validation"]["f1_macro"]["mean"],
+            metrics["models"][n]["cross_validation"]["accuracy"]["mean"],
+        ),
     )
+    selected = next(candidate for candidate in candidates if candidate["name"] == best)
+    selected_model = build_pipeline(x_train, selected["model_name"], selected["class_weight"])
+    selected_model.fit(x_train, y_train)
+    metrics["models"][best]["test"] = evaluate_predictions(selected_model, x_test, y_test)
+    joblib.dump(selected_model, ROOT / "models" / "student_outcome_pipeline.joblib")
     metrics["selected_model"] = best
     (ROOT / "models" / "model_metadata.json").write_text(json.dumps({
         "model": best, "artifact": "models/student_outcome_pipeline.joblib",
@@ -76,10 +91,15 @@ def main() -> None:
     }, indent=2), encoding="utf-8")
     (ROOT / "results" / "uci697_metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     pd.DataFrame([
-        {"model": name, "test_accuracy": value["test"]["accuracy"],
-         "test_macro_f1": value["test"]["macro"]["f1"],
-         "test_weighted_f1": value["test"]["weighted"]["f1"],
-         "test_roc_auc_ovr_macro": value["test"]["roc_auc_ovr_macro"]}
+        {"model": name, "cv_accuracy_mean": value["cross_validation"]["accuracy"]["mean"],
+         "cv_macro_f1_mean": value["cross_validation"]["f1_macro"]["mean"],
+         "cv_macro_precision_mean": value["cross_validation"]["precision_macro"]["mean"],
+         "cv_macro_recall_mean": value["cross_validation"]["recall_macro"]["mean"],
+         **({"test_accuracy": value["test"]["accuracy"],
+             "test_macro_f1": value["test"]["macro"]["f1"],
+             "test_weighted_f1": value["test"]["weighted"]["f1"],
+             "test_roc_auc_ovr_macro": value["test"]["roc_auc_ovr_macro"]}
+            if "test" in value else {})}
         for name, value in metrics["models"].items()
     ]).to_csv(ROOT / "results" / "uci697_model_comparison.csv", index=False)
     print(json.dumps(metrics, indent=2))

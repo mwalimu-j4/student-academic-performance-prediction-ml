@@ -1,10 +1,9 @@
 services:
-  - type: web
-    name: student-outcome-api
-    runtime: python
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+  -   type: web
+  name: student-outcome-api
+  runtime: python
+  buildCommand: pip install -r backend/requirements.txt
+  startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: CORS_ORIGINS

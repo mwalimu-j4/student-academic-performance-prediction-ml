@@ -66,7 +66,11 @@ def load_uci697(path: Path) -> pd.DataFrame:
     return frame
 
 
-def build_pipeline(features: pd.DataFrame, model_name: str = "random_forest") -> Pipeline:
+def build_pipeline(
+    features: pd.DataFrame,
+    model_name: str = "random_forest",
+    class_weight: str | dict[str, float] | None = "balanced",
+) -> Pipeline:
     categorical = features.select_dtypes(include=["object", "category"]).columns.tolist()
     numeric = [column for column in features.columns if column not in categorical]
     transformer = ColumnTransformer([
@@ -75,11 +79,11 @@ def build_pipeline(features: pd.DataFrame, model_name: str = "random_forest") ->
     ])
     if model_name == "random_forest":
         classifier = RandomForestClassifier(
-            n_estimators=400, class_weight="balanced", random_state=42, n_jobs=-1
+            n_estimators=400, class_weight=class_weight, random_state=42, n_jobs=-1
         )
     elif model_name == "logistic_regression":
         classifier = LogisticRegression(
-            max_iter=2000, class_weight="balanced", random_state=42
+            max_iter=2000, class_weight=class_weight, random_state=42
         )
     else:
         raise ValueError(f"Unsupported model: {model_name}")

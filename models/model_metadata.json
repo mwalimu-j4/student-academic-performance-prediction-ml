@@ -1,5 +1,5 @@
 {
-  "model": "random_forest",
+  "model": "random_forest_enrolled_weight_3",
   "artifact": "models/student_outcome_pipeline.joblib",
   "target": "Target",
   "labels": [

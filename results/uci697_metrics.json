@@ -1,0 +1,289 @@
+{
+  "dataset": {
+    "name": "Predict Students' Dropout and Academic Success",
+    "uci_id": 697,
+    "url": "https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success",
+    "doi": "https://doi.org/10.24432/C5MC89",
+    "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "rows": 4424,
+    "columns": 37,
+    "duplicate_rows": 0,
+    "missing_values": 0,
+    "target_distribution": {
+      "Dropout": 1421,
+      "Enrolled": 794,
+      "Graduate": 2209
+    }
+  },
+  "experiment": {
+    "random_state": 42,
+    "test_fraction": 0.25,
+    "training_rows": 3318,
+    "test_rows": 1106,
+    "features": [
+      "Marital status",
+      "Application mode",
+      "Application order",
+      "Course",
+      "Daytime/evening attendance",
+      "Previous qualification",
+      "Previous qualification (grade)",
+      "Nacionality",
+      "Mother's qualification",
+      "Father's qualification",
+      "Mother's occupation",
+      "Father's occupation",
+      "Admission grade",
+      "Displaced",
+      "Educational special needs",
+      "Debtor",
+      "Tuition fees up to date",
+      "Gender",
+      "Scholarship holder",
+      "Age at enrollment",
+      "International",
+      "Unemployment rate",
+      "Inflation rate",
+      "GDP"
+    ],
+    "excluded_downstream_features": [
+      "Curricular units 1st sem (credited)",
+      "Curricular units 1st sem (enrolled)",
+      "Curricular units 1st sem (evaluations)",
+      "Curricular units 1st sem (approved)",
+      "Curricular units 1st sem (grade)",
+      "Curricular units 1st sem (without evaluations)",
+      "Curricular units 2nd sem (credited)",
+      "Curricular units 2nd sem (enrolled)",
+      "Curricular units 2nd sem (evaluations)",
+      "Curricular units 2nd sem (approved)",
+      "Curricular units 2nd sem (grade)",
+      "Curricular units 2nd sem (without evaluations)"
+    ]
+  },
+  "models": {
+    "logistic_regression": {
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.5527417361754712,
+          "std": 0.014427096676880025
+        },
+        "f1_macro": {
+          "mean": 0.523217320376367,
+          "std": 0.014022543767886453
+        },
+        "precision_macro": {
+          "mean": 0.5444516335631598,
+          "std": 0.015798426172742523
+        },
+        "recall_macro": {
+          "mean": 0.5315466584568023,
+          "std": 0.014765857496925097
+        }
+      },
+      "test": {
+        "test_rows": 1106,
+        "accuracy": 0.5433996383363472,
+        "macro": {
+          "precision": 0.5513032870064256,
+          "recall": 0.5334406433747291,
+          "f1": 0.5222558207696212
+        },
+        "weighted": {
+          "precision": 0.6224934028654517,
+          "recall": 0.5433996383363472,
+          "f1": 0.567918264588425
+        },
+        "per_class": {
+          "Dropout": {
+            "precision": 0.6813186813186813,
+            "recall": 0.523943661971831,
+            "f1-score": 0.5923566878980892,
+            "support": 355.0
+          },
+          "Enrolled": {
+            "precision": 0.25569620253164554,
+            "recall": 0.507537688442211,
+            "f1-score": 0.3400673400673401,
+            "support": 199.0
+          },
+          "Graduate": {
+            "precision": 0.7168949771689498,
+            "recall": 0.5688405797101449,
+            "f1-score": 0.6343434343434343,
+            "support": 552.0
+          }
+        },
+        "classification_report": {
+          "Dropout": {
+            "precision": 0.6813186813186813,
+            "recall": 0.523943661971831,
+            "f1-score": 0.5923566878980892,
+            "support": 355.0
+          },
+          "Enrolled": {
+            "precision": 0.25569620253164554,
+            "recall": 0.507537688442211,
+            "f1-score": 0.3400673400673401,
+            "support": 199.0
+          },
+          "Graduate": {
+            "precision": 0.7168949771689498,
+            "recall": 0.5688405797101449,
+            "f1-score": 0.6343434343434343,
+            "support": 552.0
+          },
+          "accuracy": 0.5433996383363472,
+          "macro avg": {
+            "precision": 0.5513032870064256,
+            "recall": 0.5334406433747291,
+            "f1-score": 0.5222558207696212,
+            "support": 1106.0
+          },
+          "weighted avg": {
+            "precision": 0.6224934028654517,
+            "recall": 0.5433996383363472,
+            "f1-score": 0.567918264588425,
+            "support": 1106.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            186,
+            109,
+            60
+          ],
+          [
+            34,
+            101,
+            64
+          ],
+          [
+            53,
+            185,
+            314
+          ]
+        ],
+        "roc_auc_ovr_macro": 0.7296438802814645,
+        "roc_auc_ovr_weighted": 0.7469131163381366,
+        "labels": [
+          "Dropout",
+          "Enrolled",
+          "Graduate"
+        ]
+      }
+    },
+    "random_forest": {
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.6359210598048302,
+          "std": 0.012086656702638808
+        },
+        "f1_macro": {
+          "mean": 0.5753603639078978,
+          "std": 0.014197887645355038
+        },
+        "precision_macro": {
+          "mean": 0.5814645927154019,
+          "std": 0.014996137001403006
+        },
+        "recall_macro": {
+          "mean": 0.5728656086514095,
+          "std": 0.01385051720572423
+        }
+      },
+      "test": {
+        "test_rows": 1106,
+        "accuracy": 0.5913200723327305,
+        "macro": {
+          "precision": 0.5314102980615488,
+          "recall": 0.5315802835364821,
+          "f1": 0.5314920375246032
+        },
+        "weighted": {
+          "precision": 0.5920230836610961,
+          "recall": 0.5913200723327305,
+          "f1": 0.5916691007308756
+        },
+        "per_class": {
+          "Dropout": {
+            "precision": 0.6084507042253521,
+            "recall": 0.6084507042253521,
+            "f1-score": 0.6084507042253521,
+            "support": 355.0
+          },
+          "Enrolled": {
+            "precision": 0.29850746268656714,
+            "recall": 0.3015075376884422,
+            "f1-score": 0.3,
+            "support": 199.0
+          },
+          "Graduate": {
+            "precision": 0.6872727272727273,
+            "recall": 0.6847826086956522,
+            "f1-score": 0.6860254083484574,
+            "support": 552.0
+          }
+        },
+        "classification_report": {
+          "Dropout": {
+            "precision": 0.6084507042253521,
+            "recall": 0.6084507042253521,
+            "f1-score": 0.6084507042253521,
+            "support": 355.0
+          },
+          "Enrolled": {
+            "precision": 0.29850746268656714,
+            "recall": 0.3015075376884422,
+            "f1-score": 0.3,
+            "support": 199.0
+          },
+          "Graduate": {
+            "precision": 0.6872727272727273,
+            "recall": 0.6847826086956522,
+            "f1-score": 0.6860254083484574,
+            "support": 552.0
+          },
+          "accuracy": 0.5913200723327305,
+          "macro avg": {
+            "precision": 0.5314102980615488,
+            "recall": 0.5315802835364821,
+            "f1-score": 0.5314920375246032,
+            "support": 1106.0
+          },
+          "weighted avg": {
+            "precision": 0.5920230836610961,
+            "recall": 0.5913200723327305,
+            "f1-score": 0.5916691007308756,
+            "support": 1106.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            216,
+            54,
+            85
+          ],
+          [
+            52,
+            60,
+            87
+          ],
+          [
+            87,
+            87,
+            378
+          ]
+        ],
+        "roc_auc_ovr_macro": 0.7417991941098471,
+        "roc_auc_ovr_weighted": 0.7552812707396854,
+        "labels": [
+          "Dropout",
+          "Enrolled",
+          "Graduate"
+        ]
+      }
+    }
+  },
+  "selected_model": "random_forest"
+}

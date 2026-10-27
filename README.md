@@ -53,8 +53,8 @@ npm run start
 ## Deployment
 
 1. **Neon/PostgreSQL:** create a database and set `DATABASE_URL` to its SSL connection string. The API creates `prediction_history` on first persisted prediction. Do not commit the value.
-2. **Render:** create a Python web service rooted at `backend`, build with `pip install -r requirements.txt`, start with `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, and set `DATABASE_URL` and `CORS_ORIGINS` to the final Vercel origin. `backend/render.yaml` contains the same configuration. Render must have access to the repository-root `models/` and `results/` artifacts; if Render's root directory checkout does not include them, deploy from the repository root with `rootDir` omitted and use `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`.
-3. **Vercel:** import the repository, set the root directory to `frontend`, build with `npm run build`, and set `NEXT_PUBLIC_API_URL` to the actual Render API URL. Update Render `CORS_ORIGINS` if the Vercel domain changes. Current frontend dependency audit is clean after upgrading Next.js to 16.4.3.
+2. **Render:** create a Python web service from the repository root (leave Render's Root Directory blank), build with `pip install -r backend/requirements.txt`, start with `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`, and set `DATABASE_URL` and `CORS_ORIGINS` to the final Vercel origin. `backend/render.yaml` contains the same configuration. The repository root is required so the service can load `models/` and `results/`.
+3. **Vercel:** import the repository, set the root directory to `frontend`, build with `npm run build`, and set `NEXT_PUBLIC_API_URL` to the actual Render API URL. The frontend template is [`frontend/.env.example`](./frontend/.env.example). Update Render `CORS_ORIGINS` if the Vercel domain changes. Current frontend dependency audit is clean after upgrading Next.js to 16.4.3.
 4. Verify `<render-url>/health`, `<render-url>/api/v1/metrics`, and a browser prediction before calling the deployment live. This repository does not claim that public services have been deployed.
 
 ## Dataset and license

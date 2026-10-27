@@ -22,3 +22,6 @@ results/reliability_analysis/*.joblib
 frontend/node_modules/
 frontend/.next/
 frontend/out/
+frontend/tsconfig.tsbuildinfo
+!.env.example
+!frontend/.env.example

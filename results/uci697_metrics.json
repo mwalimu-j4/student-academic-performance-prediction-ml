@@ -59,10 +59,13 @@
       "Curricular units 2nd sem (approved)",
       "Curricular units 2nd sem (grade)",
       "Curricular units 2nd sem (without evaluations)"
-    ]
+    ],
+    "test_evaluation_policy": "The holdout is evaluated once, only after CV model selection."
   },
   "models": {
-    "logistic_regression": {
+    "logistic_regression_balanced": {
+      "algorithm": "logistic_regression",
+      "class_weight": "balanced",
       "cross_validation": {
         "accuracy": {
           "mean": 0.5527417361754712,
@@ -80,100 +83,33 @@
           "mean": 0.5315466584568023,
           "std": 0.014765857496925097
         }
-      },
-      "test": {
-        "test_rows": 1106,
-        "accuracy": 0.5433996383363472,
-        "macro": {
-          "precision": 0.5513032870064256,
-          "recall": 0.5334406433747291,
-          "f1": 0.5222558207696212
-        },
-        "weighted": {
-          "precision": 0.6224934028654517,
-          "recall": 0.5433996383363472,
-          "f1": 0.567918264588425
-        },
-        "per_class": {
-          "Dropout": {
-            "precision": 0.6813186813186813,
-            "recall": 0.523943661971831,
-            "f1-score": 0.5923566878980892,
-            "support": 355.0
-          },
-          "Enrolled": {
-            "precision": 0.25569620253164554,
-            "recall": 0.507537688442211,
-            "f1-score": 0.3400673400673401,
-            "support": 199.0
-          },
-          "Graduate": {
-            "precision": 0.7168949771689498,
-            "recall": 0.5688405797101449,
-            "f1-score": 0.6343434343434343,
-            "support": 552.0
-          }
-        },
-        "classification_report": {
-          "Dropout": {
-            "precision": 0.6813186813186813,
-            "recall": 0.523943661971831,
-            "f1-score": 0.5923566878980892,
-            "support": 355.0
-          },
-          "Enrolled": {
-            "precision": 0.25569620253164554,
-            "recall": 0.507537688442211,
-            "f1-score": 0.3400673400673401,
-            "support": 199.0
-          },
-          "Graduate": {
-            "precision": 0.7168949771689498,
-            "recall": 0.5688405797101449,
-            "f1-score": 0.6343434343434343,
-            "support": 552.0
-          },
-          "accuracy": 0.5433996383363472,
-          "macro avg": {
-            "precision": 0.5513032870064256,
-            "recall": 0.5334406433747291,
-            "f1-score": 0.5222558207696212,
-            "support": 1106.0
-          },
-          "weighted avg": {
-            "precision": 0.6224934028654517,
-            "recall": 0.5433996383363472,
-            "f1-score": 0.567918264588425,
-            "support": 1106.0
-          }
-        },
-        "confusion_matrix": [
-          [
-            186,
-            109,
-            60
-          ],
-          [
-            34,
-            101,
-            64
-          ],
-          [
-            53,
-            185,
-            314
-          ]
-        ],
-        "roc_auc_ovr_macro": 0.7296438802814645,
-        "roc_auc_ovr_weighted": 0.7469131163381366,
-        "labels": [
-          "Dropout",
-          "Enrolled",
-          "Graduate"
-        ]
       }
     },
-    "random_forest": {
+    "logistic_regression_unweighted": {
+      "algorithm": "logistic_regression",
+      "class_weight": null,
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.6211547547656691,
+          "std": 0.015614955506920958
+        },
+        "f1_macro": {
+          "mean": 0.4659607978190025,
+          "std": 0.014126881754302371
+        },
+        "precision_macro": {
+          "mean": 0.536134050278882,
+          "std": 0.007491349119525262
+        },
+        "recall_macro": {
+          "mean": 0.489557117912358,
+          "std": 0.014051156633819206
+        }
+      }
+    },
+    "random_forest_balanced": {
+      "algorithm": "random_forest",
+      "class_weight": "balanced",
       "cross_validation": {
         "accuracy": {
           "mean": 0.6359210598048302,
@@ -191,92 +127,140 @@
           "mean": 0.5728656086514095,
           "std": 0.01385051720572423
         }
+      }
+    },
+    "random_forest_unweighted": {
+      "algorithm": "random_forest",
+      "class_weight": null,
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.6458744480183176,
+          "std": 0.011983467180089127
+        },
+        "f1_macro": {
+          "mean": 0.5223978021977571,
+          "std": 0.020904762452350036
+        },
+        "precision_macro": {
+          "mean": 0.5970342364468882,
+          "std": 0.029903949653759428
+        },
+        "recall_macro": {
+          "mean": 0.5315495767657464,
+          "std": 0.014423522324239992
+        }
+      }
+    },
+    "random_forest_enrolled_weight_3": {
+      "algorithm": "random_forest",
+      "class_weight": {
+        "Dropout": 1.0,
+        "Enrolled": 3.0,
+        "Graduate": 1.0
+      },
+      "cross_validation": {
+        "accuracy": {
+          "mean": 0.6374243580657472,
+          "std": 0.014786491919387633
+        },
+        "f1_macro": {
+          "mean": 0.5821107643916472,
+          "std": 0.016403496641875914
+        },
+        "precision_macro": {
+          "mean": 0.5953350808247049,
+          "std": 0.013976642530343374
+        },
+        "recall_macro": {
+          "mean": 0.5770572092542352,
+          "std": 0.016214410821627886
+        }
       },
       "test": {
         "test_rows": 1106,
-        "accuracy": 0.5913200723327305,
+        "accuracy": 0.6039783001808319,
         "macro": {
-          "precision": 0.5314102980615488,
-          "recall": 0.5315802835364821,
-          "f1": 0.5314920375246032
+          "precision": 0.5579407752389991,
+          "recall": 0.5437090107952842,
+          "f1": 0.5473921928653708
         },
         "weighted": {
-          "precision": 0.5920230836610961,
-          "recall": 0.5913200723327305,
-          "f1": 0.5916691007308756
+          "precision": 0.613807948589491,
+          "recall": 0.6039783001808319,
+          "f1": 0.6055840153270475
         },
         "per_class": {
           "Dropout": {
-            "precision": 0.6084507042253521,
-            "recall": 0.6084507042253521,
-            "f1-score": 0.6084507042253521,
+            "precision": 0.6890459363957597,
+            "recall": 0.5492957746478874,
+            "f1-score": 0.6112852664576802,
             "support": 355.0
           },
           "Enrolled": {
-            "precision": 0.29850746268656714,
-            "recall": 0.3015075376884422,
-            "f1-score": 0.3,
+            "precision": 0.30973451327433627,
+            "recall": 0.35175879396984927,
+            "f1-score": 0.32941176470588235,
             "support": 199.0
           },
           "Graduate": {
-            "precision": 0.6872727272727273,
-            "recall": 0.6847826086956522,
-            "f1-score": 0.6860254083484574,
+            "precision": 0.6750418760469011,
+            "recall": 0.730072463768116,
+            "f1-score": 0.70147954743255,
             "support": 552.0
           }
         },
         "classification_report": {
           "Dropout": {
-            "precision": 0.6084507042253521,
-            "recall": 0.6084507042253521,
-            "f1-score": 0.6084507042253521,
+            "precision": 0.6890459363957597,
+            "recall": 0.5492957746478874,
+            "f1-score": 0.6112852664576802,
             "support": 355.0
           },
           "Enrolled": {
-            "precision": 0.29850746268656714,
-            "recall": 0.3015075376884422,
-            "f1-score": 0.3,
+            "precision": 0.30973451327433627,
+            "recall": 0.35175879396984927,
+            "f1-score": 0.32941176470588235,
             "support": 199.0
           },
           "Graduate": {
-            "precision": 0.6872727272727273,
-            "recall": 0.6847826086956522,
-            "f1-score": 0.6860254083484574,
+            "precision": 0.6750418760469011,
+            "recall": 0.730072463768116,
+            "f1-score": 0.70147954743255,
             "support": 552.0
           },
-          "accuracy": 0.5913200723327305,
+          "accuracy": 0.6039783001808319,
           "macro avg": {
-            "precision": 0.5314102980615488,
-            "recall": 0.5315802835364821,
-            "f1-score": 0.5314920375246032,
+            "precision": 0.5579407752389991,
+            "recall": 0.5437090107952842,
+            "f1-score": 0.5473921928653708,
             "support": 1106.0
           },
           "weighted avg": {
-            "precision": 0.5920230836610961,
-            "recall": 0.5913200723327305,
-            "f1-score": 0.5916691007308756,
+            "precision": 0.613807948589491,
+            "recall": 0.6039783001808319,
+            "f1-score": 0.6055840153270475,
             "support": 1106.0
           }
         },
         "confusion_matrix": [
           [
-            216,
+            195,
+            61,
+            99
+          ],
+          [
+            34,
+            70,
+            95
+          ],
+          [
             54,
-            85
-          ],
-          [
-            52,
-            60,
-            87
-          ],
-          [
-            87,
-            87,
-            378
+            95,
+            403
           ]
         ],
-        "roc_auc_ovr_macro": 0.7417991941098471,
-        "roc_auc_ovr_weighted": 0.7552812707396854,
+        "roc_auc_ovr_macro": 0.7422275815483781,
+        "roc_auc_ovr_weighted": 0.75517566123382,
         "labels": [
           "Dropout",
           "Enrolled",
@@ -285,5 +269,5 @@
       }
     }
   },
-  "selected_model": "random_forest"
+  "selected_model": "random_forest_enrolled_weight_3"
 }

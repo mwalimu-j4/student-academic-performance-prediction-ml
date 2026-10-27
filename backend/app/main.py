@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -10,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import joblib
+import psycopg
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
@@ -57,25 +59,33 @@ def _validate_features(features: dict[str, float | int]) -> None:
     if missing or unexpected:
         detail = {"missing": missing, "unexpected": unexpected}
         raise HTTPException(status_code=422, detail=detail)
+    if any(isinstance(value, bool) or not math.isfinite(float(value)) for value in features.values()):
+        raise HTTPException(status_code=422, detail="All feature values must be finite numbers.")
 
 
-def _persist_prediction(record: dict[str, Any], features: dict[str, float | int]) -> None:
-    """Persist history when PostgreSQL is configured; local demos remain stateless."""
+def _ensure_history_table() -> None:
     if not database_url:
         return
-    import psycopg
     with psycopg.connect(database_url) as connection:
         connection.execute(
             """CREATE TABLE IF NOT EXISTS prediction_history (
                 id BIGSERIAL PRIMARY KEY, created_at TIMESTAMPTZ NOT NULL,
                 predicted_class TEXT NOT NULL, confidence DOUBLE PRECISION NOT NULL,
-                probabilities JSONB NOT NULL, features JSONB NOT NULL, model_name TEXT NOT NULL
+                probabilities JSONB NOT NULL, model_name TEXT NOT NULL
             )"""
         )
+        connection.commit()
+
+
+def _persist_prediction(record: dict[str, Any], features: dict[str, float | int]) -> None:
+    """Persist non-identifying prediction metadata when PostgreSQL is configured."""
+    if not database_url:
+        return
+    with psycopg.connect(database_url) as connection:
         connection.execute(
-            "INSERT INTO prediction_history (created_at, predicted_class, confidence, probabilities, features, model_name) VALUES (%s, %s, %s, %s, %s, %s)",
+            "INSERT INTO prediction_history (created_at, predicted_class, confidence, probabilities, model_name) VALUES (%s, %s, %s, %s, %s)",
             (record["created_at"], record["prediction"], record["confidence"],
-             json.dumps(record["probabilities"]), json.dumps(features), record["model"]),
+             json.dumps(record["probabilities"]), record["model"]),
         )
         connection.commit()
 
@@ -83,6 +93,7 @@ def _persist_prediction(record: dict[str, Any], features: dict[str, float | int]
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     _load_artifacts()
+    _ensure_history_table()
     yield
 
 
@@ -129,23 +140,28 @@ def predict(request: PredictionRequest) -> PredictionResponse:
         "probabilities": {str(label): float(probability) for label, probability in zip(model.classes_, probabilities)},
         "model": str(metadata.get("model", "unknown")), "created_at": created_at,
     }
+    try:
+        _persist_prediction(record, request.features)
+    except psycopg.Error as error:
+        raise HTTPException(status_code=503, detail="Prediction history database is unavailable.") from error
     history.append(record)
-    _persist_prediction(record, request.features)
     return PredictionResponse(**record)
 
 
 @app.get("/api/v1/predictions")
 def get_predictions(limit: int = Query(default=50, ge=1, le=200)) -> list[dict[str, Any]]:
     if database_url:
-        import psycopg
-        with psycopg.connect(database_url) as connection:
-            rows = connection.execute(
-                "SELECT created_at, predicted_class, confidence, probabilities, model_name FROM prediction_history ORDER BY created_at DESC LIMIT %s",
-                (limit,),
-            ).fetchall()
-            return [
-                {"created_at": row[0], "prediction": row[1], "confidence": row[2],
-                 "probabilities": row[3], "model": row[4]}
-                for row in rows
-            ]
+        try:
+            with psycopg.connect(database_url) as connection:
+                rows = connection.execute(
+                    "SELECT created_at, predicted_class, confidence, probabilities, model_name FROM prediction_history ORDER BY created_at DESC LIMIT %s",
+                    (limit,),
+                ).fetchall()
+                return [
+                    {"created_at": row[0], "prediction": row[1], "confidence": row[2],
+                     "probabilities": row[3], "model": row[4]}
+                    for row in rows
+                ]
+        except psycopg.Error as error:
+            raise HTTPException(status_code=503, detail="Prediction history database is unavailable.") from error
     return history[-limit:][::-1]

@@ -13,4 +13,12 @@ results/*
 !results/*.json
 !results/*.csv
 !results/*.png
+!results/reliability_analysis/
+!results/reliability_analysis/*.json
+!results/reliability_analysis/*.csv
+!results/reliability_analysis/*.png
 results/*.joblib
+results/reliability_analysis/*.joblib
+frontend/node_modules/
+frontend/.next/
+frontend/out/
